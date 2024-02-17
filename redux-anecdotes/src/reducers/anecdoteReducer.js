@@ -31,10 +31,11 @@ const anecdoteSlice = createSlice({
   initialState: initialState,
   reducers: {
     createAnecdote(state, action){
-      const content = action.payload
-      state.push(
-        asObject(content)
-      )
+      // const content = action.payload
+      // state.push(
+      //   asObject(content)
+      // )
+      state.push(action.payload)
     },
 
     addVote(state, action){
