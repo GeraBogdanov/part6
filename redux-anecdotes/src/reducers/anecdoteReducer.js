@@ -19,7 +19,8 @@ const asObject = (anecdote) => {
   };
 };
 
-const initialState = anecdotesAtStart.map(asObject);
+// const initialState = anecdotesAtStart.map(asObject);
+const initialState = []
 
 //CreateSlice funciton returns an object containing the reducer as well  as the action creators
 //defined by the reducers parameter
@@ -51,9 +52,12 @@ const anecdoteSlice = createSlice({
       
       return state.map((anecdote) => 
         anecdote.id !== id ? anecdote : votedAnecdote)
+    },
+    setAnecdotes(state, action) {
+      return action.payload
     }
   }
 })
 
-export const { createAnecdote, addVote} = anecdoteSlice.actions
+export const { createAnecdote, addVote, setAnecdotes } = anecdoteSlice.actions
 export default anecdoteSlice.reducer
