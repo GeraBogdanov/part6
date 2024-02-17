@@ -31,17 +31,11 @@ const anecdoteSlice = createSlice({
   name: 'anecdotes',
   initialState: initialState,
   reducers: {
-    addVote(state, action){
-      const id = action.payload
-      //state.find returns the object in state if it's not the primitive 
-      // the object will be reference
-      const anecdoteToVote = current(state).find((anecdote) => anecdote.id === id)
+    voteAnecdote(state, action){
+      const id = action.payload.id
 
-      const votedAnecdote = {
-        ...anecdoteToVote,
-        votes: anecdoteToVote.votes + 1
-      }
-      
+      const votedAnecdote = action.payload
+       
       console.log(JSON.parse(JSON.stringify(state)))
       
       return state.map((anecdote) => 
@@ -56,7 +50,7 @@ const anecdoteSlice = createSlice({
   }
 })
 
-export const { addVote, setAnecdotes, appendAnecote } = anecdoteSlice.actions
+export const { voteAnecdote, setAnecdotes, appendAnecote } = anecdoteSlice.actions
 
 export const initializeAnecdotes = () => {
   return async dispatch => {
@@ -72,4 +66,10 @@ export const createAnecdote = content => {
   }
 }
 
+export const addVote = anecdote => {
+  return async dispatch => {
+    const vote = await anecdoteService.addVote(anecdote)
+    dispatch(voteAnecdote(vote))
+  }
+}
 export default anecdoteSlice.reducer
