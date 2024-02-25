@@ -19,9 +19,9 @@ const App = () => {
   
   const handleVote = (anecdote) => {
     updateVoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
-    dispatch({ type: 'SHOW', string: `Anecdote ${anecdote.content} voted` })
+    dispatch({ type: 'SHOW', payload: `Anecdote ${anecdote.content} voted` })
     setTimeout(() => {
-      dispatch({type:'HIDE', string: ''})
+      dispatch({type:'HIDE', payload: ''})
     }, 5 * 1000)
     console.log('vote')
   }
