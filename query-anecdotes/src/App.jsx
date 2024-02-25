@@ -3,30 +3,42 @@ import { getAnecdotes, voteAnecdote } from './requests'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import { useNotificationDispatch } from './NotificationContext'
+
 
 const App = () => {
   const queryClient = useQueryClient()
-
-  const updateAnecdoteMutation = useMutation({
+  const dispatch = useNotificationDispatch()
+  // 
+  const updateVoteMutation = useMutation({
     mutationFn: voteAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries('anecdotes')
     }
   })
-
+  
   const handleVote = (anecdote) => {
-    updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1})
+    updateVoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
+    dispatch({ type: 'SHOW', string: `Anecdote ${anecdote.content} voted` })
+    setTimeout(() => {
+      dispatch({type:'HIDE', string: ''})
+    }, 5 * 1000)
     console.log('vote')
   }
-
+  
+  // axios method call is wrapped in a query formed with the useQuery funciton
+  // First parameter is a key to the query 
+  // The return value of the useQuery is an object 
+  // that indicates the status of the query
+  
   const result = useQuery({
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes,
     retry: false,
   })
-
+  
   console.log(JSON.parse(JSON.stringify(result)))
-
+  
   if (result.isLoading) {
     return <div>loading data...</div>
   }
@@ -36,10 +48,11 @@ const App = () => {
 
   const anecdotes = result.data
 
+  
+
   return (
     <div>
       <h3>Anecdote app</h3>
-
       <Notification />
       <AnecdoteForm />
 
